@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="leo_rover">
+
+  <xacro:arg name="tf_odom_enabled" default="true" />
+  <xacro:arg name="ns" default="" />
+
+  <!-- include -->
+  <xacro:include filename="$(find ros_my_robot_gazebo)/urdf/leo_rover/wheel.xacro" />
+  <xacro:include filename="$(find ros_my_robot_gazebo)/urdf/accessory/imu.xacro" />
+  <xacro:include filename="$(find ros_my_robot_gazebo)/urdf/accessory/rplidar.xacro" />
+  <xacro:include filename="$(find ros_my_robot_gazebo)/urdf/accessory/usb_camera.xacro" />
+
+  <!-- global vars -->
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+
+  <!-- base link -->
+  <link name="$(arg ns)/base_link">
+    <inertial>
+      <mass value="5.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://ros_my_robot_gazebo/mesh/leo_rover/base.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <gazebo reference="$(arg ns)/base_link">
+      <material>Gazebo/Gray</material>
+  </gazebo>
+
+  <!-- wheel -->
+  <joint name="$(arg ns)/wheel_FL_joint" type="continuous">
+    <origin xyz="0.1472 0.1114 -0.1353" rpy="0 0 ${pi}"/>
+    <parent link="$(arg ns)/base_link"/>
+    <child link="$(arg ns)/wheel_FL_link"/>
+    <axis xyz="0 -1 0"/>
+  </joint>
+
+  <xacro:wheel ns="(arg ns)" name="FL" model="left" mu1="5.0" mu2="2.0" />
+
+  <joint name="$(arg ns)/wheel_FR_joint" type="continuous">
+    <origin xyz="0.1472 -0.1114 -0.1353" rpy="0 0 0"/>
+    <parent link="$(arg ns)/base_link"/>
+    <child link="$(arg ns)/wheel_FR_link"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <xacro:wheel ns="(arg ns)" name="FR" model="right" mu1="5.0" mu2="2.0" />
+
+  <joint name="$(arg ns)/wheel_RL_joint" type="continuous">
+    <origin xyz="-0.1419 0.1114 -0.1353" rpy="0 0 ${pi}"/>
+    <parent link="$(arg ns)/base_link"/>
+    <child link="$(arg ns)/wheel_RL_link"/>
+    <axis xyz="0 -1 0"/>
+  </joint>
+
+  <xacro:wheel ns="(arg ns)" name="RL" model="left" mu1="0.0" mu2="0.0" />
+
+  <joint name="$(arg ns)/wheel_RR_joint" type="continuous">
+    <origin xyz="-0.1419 -0.1114 -0.1353" rpy="0 0 0"/>
+    <parent link="$(arg ns)/base_link"/>
+    <child link="$(arg ns)/wheel_RR_link"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <xacro:wheel ns="(arg ns)" name="RR" model="right" mu1="0.0" mu2="0.0" />
+
+  <!-- usb_camera -->
+  <joint name="$(arg ns)/camera_joint" type="fixed">
+    <origin xyz="0.0971 0 -0.0427" rpy="0 0 0"/>
+    <parent link="$(arg ns)/base_link"/>
+    <child link="$(arg ns)/camera_link"/>
+  </joint>
+
+  <xacro:usb_camera ns="$(arg ns)" />
+
+  <!-- rplidar -->
+  <joint name="$(arg ns)/rplidar_joint" type="fixed">
+    <origin xyz="0.08 0 0.02" rpy="0 0 0" />
+    <parent link="$(arg ns)/base_link"/>
+    <child link="$(arg ns)/rplidar_link"/>
+  </joint>
+
+  <xacro:rplidar ns="$(arg ns)" />
+
+  <!-- imu -->
+  <joint name="$(arg ns)/imu_joint" type="fixed">
+    <parent link="$(arg ns)/base_link"/>
+    <child link="$(arg ns)/imu_link"/>
+    <origin xyz="0.027 0 -0.07" rpy="0 0 0"/>
+  </joint>
+
+  <xacro:imu ns="$(arg ns)" />
+
+  <!-- joint state -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>$(arg ns)</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
+
+  <!-- skid steering drive -->
+  <gazebo>
+    <plugin name="wheel_controller" filename="libgazebo_ros_skid_steer_drive.so">
+      <updateRate>100.0</updateRate>
+      <robotNamespace>$(arg ns)</robotNamespace>
+
+      <leftFrontJoint>$(arg ns)/wheel_FL_joint</leftFrontJoint>
+      <rightFrontJoint>$(arg ns)/wheel_FR_joint</rightFrontJoint>
+      <leftRearJoint>$(arg ns)/wheel_RL_joint</leftRearJoint>
+      <rightRearJoint>$(arg ns)/wheel_RR_joint</rightRearJoint>
+
+      <robotBaseFrame>$(arg ns)/base_link</robotBaseFrame>
+      <odometryFrame>$(arg ns)/odom</odometryFrame>
+
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+
+      <topicName>$(arg ns)/cmd_vel</topicName>
+      <broadcastTF>$(arg tf_odom_enabled)</broadcastTF>
+
+      <torque>30</torque>
+      <wheelSeparation>0.32</wheelSeparation>
+      <wheelDiameter>0.13</wheelDiameter>
+      <covariance_x>0.001</covariance_x>
+      <covariance_y>0.001</covariance_y>
+      <covariance_yaw>0.01</covariance_yaw>
+
+    </plugin>
+  </gazebo>
+
+</robot>

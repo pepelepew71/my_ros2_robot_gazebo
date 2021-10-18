@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="wheel" params="ns name model mu1 mu2">
+        <link name="$(arg ns)/wheel_${name}_link">
+        <inertial>
+            <mass value="0.2"/>
+            <origin xyz="0 0 0"/>
+            <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <mesh filename="package://ros_my_robot_gazebo/mesh/leo_rover/wheel_${model}.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <mesh filename="package://ros_my_robot_gazebo/mesh/leo_rover/wheel_${model}.dae"/>
+            </geometry>
+        </collision>
+        </link>
+
+        <gazebo reference="$(arg ns)/wheel_${name}_link">
+        <material>Gazebo/FlatBlack</material>
+        <mu1>${mu1}</mu1>
+        <mu2>${mu2}</mu2>
+        <kp>5000.0</kp>
+        <kd>10.0</kd>
+        <minDepth>0.0</minDepth>
+        <maxVel>5</maxVel>
+        <fdir1>0 0 0</fdir1>
+        </gazebo>
+    </xacro:macro>
+
+</robot>

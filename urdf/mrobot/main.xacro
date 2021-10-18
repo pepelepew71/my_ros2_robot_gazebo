@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:arg name="tf_odom_enabled" default="true" />
+    <xacro:arg name="ns" default="" />
+
+    <!-- Include -->
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/material.xacro" />
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/property.xacro" />
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/inertia.xacro" />
+
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/wheel.xacro" />
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/caster.xacro" />
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/plate.xacro" />
+
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/rplidar.xacro" />
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/imu.xacro" />
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/usb_camera.xacro" />
+
+    <!-- Body of robot, with plates, standoffs and Create -->
+    <!-- BASE-LINK -->
+    <link name="$(arg ns)/base_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder length="${base_link_length}" radius="${base_link_radius}"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder length="${base_link_length}" radius="${base_link_radius}"/>
+            </geometry>
+        </collision>
+        <!-- warning: KDL does not support a root link with an inertia. -->
+        <!-- <xacro:cylinder_inertial_matrix m="${base_mass}" r="${base_link_radius}" h="${base_link_length}" /> -->
+        <inertial>
+            <mass value="5.0"/>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+    </link>
+
+    <gazebo reference="$(arg ns)/base_link">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <!-- Wheel Definitions -->
+    <xacro:wheel lr="right" translateY="-1" parent="$(arg ns)/base_link" ns="$(arg ns)" />
+    <xacro:wheel lr="left" translateY="1" parent="$(arg ns)/base_link" ns="$(arg ns)" />
+
+    <!-- Casters Definitions -->
+    <xacro:caster fb="front"  translateX="1" parent="$(arg ns)/base_link" ns="$(arg ns)" />
+
+    <!-- plate Definitions -->
+    <xacro:plate num="1" parent="$(arg ns)/base_link" ns="$(arg ns)" />
+    <xacro:plate num="2" parent="$(arg ns)/plate_1_link" ns="$(arg ns)" />
+
+    <!-- Attach the Rplidar -->
+    <joint name="$(arg ns)/rplidar_joint" type="fixed">
+        <origin xyz="0 0 0.025" rpy="0 0 0" />
+        <parent link="$(arg ns)/plate_2_link" />
+        <child link="$(arg ns)/rplidar_link" />
+    </joint>
+
+    <xacro:rplidar ns="$(arg ns)" />
+
+    <!-- Attach the IMU -->
+    <!-- <joint name="$(arg ns)/imu_joint" type="fixed">
+        <origin xyz="0 0 0.02" rpy="0 0 0" />
+        <parent link="$(arg ns)/base_link" />
+        <child link="$(arg ns)/imu_link" />
+    </joint>
+
+    <xacro:imu ns="$(arg ns)" /> -->
+
+    <!-- Attach the Camera -->
+    <!-- <joint name="$(arg ns)/camera_joint" type="fixed">
+        <origin xyz="0.12 0 0.1" rpy="0 0 0" />
+        <parent link="$(arg ns)/base_link" />
+        <child link="$(arg ns)/camera_link" />
+    </joint>
+
+    <xacro:usb_camera ns="$(arg ns)" /> -->
+
+    <!-- # joint state -->
+    <gazebo>
+        <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+            <ros>
+                <remapping>~/out:=joint_states</remapping>
+            </ros>
+            <update_rate>30</update_rate>
+            <joint_name>$(arg ns)/wheel_left_joint</joint_name>
+            <joint_name>$(arg ns)/wheel_right_joint</joint_name>
+        </plugin>
+    </gazebo>
+
+    <!-- # differential drive -->
+    <gazebo>
+        <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+            <robotNamespace>$(arg ns)/</robotNamespace>
+            <legacyMode>true</legacyMode>
+            <rosDebugLevel>Debug</rosDebugLevel>
+
+            <publishWheelTF>true</publishWheelTF>
+            <publishOdomTF>$(arg tf_odom_enabled)</publishOdomTF>
+            <publishTf>1</publishTf>
+            <publishWheelJointState>true</publishWheelJointState>
+            <broadcastTF>1</broadcastTF>
+
+            <alwaysOn>true</alwaysOn>
+            <updateRate>100.0</updateRate>
+
+            <left_joint>$(arg ns)/wheel_left_joint</left_joint>
+            <right_joint>$(arg ns)/wheel_right_joint</right_joint>
+
+            <wheelTorque>30</wheelTorque>
+            <wheel_separation>${base_link_radius*2}</wheel_separation>
+            <wheel_diameter>${2*wheel_radius}</wheel_diameter>
+            <wheelAcceleration>1.8</wheelAcceleration>
+
+            <commandTopic>cmd_vel</commandTopic>
+            <robotBaseFrame>base_link</robotBaseFrame>
+            <odometryFrame>odom</odometryFrame>
+            <odometryTopic>odom</odometryTopic>
+        </plugin>
+    </gazebo>
+
+</robot>
