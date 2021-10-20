@@ -14,7 +14,7 @@
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/caster.xacro" />
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/plate.xacro" />
 
-    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/rplidar.xacro" />
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/lidar.xacro" />
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/imu.xacro" />
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/usb_camera.xacro" />
 
@@ -57,32 +57,32 @@
     <xacro:plate num="1" parent="$(arg ns)/base_link" ns="$(arg ns)" />
     <xacro:plate num="2" parent="$(arg ns)/plate_1_link" ns="$(arg ns)" />
 
-    <!-- Attach the Rplidar -->
-    <joint name="$(arg ns)/rplidar_joint" type="fixed">
+    <!-- Attach the lidar -->
+    <joint name="$(arg ns)/lidar_joint" type="fixed">
         <origin xyz="0 0 0.025" rpy="0 0 0" />
         <parent link="$(arg ns)/plate_2_link" />
-        <child link="$(arg ns)/rplidar_link" />
+        <child link="$(arg ns)/lidar_link" />
     </joint>
 
-    <xacro:rplidar ns="$(arg ns)" />
+    <xacro:lidar ns="$(arg ns)" />
 
     <!-- Attach the IMU -->
-    <!-- <joint name="$(arg ns)/imu_joint" type="fixed">
+    <joint name="$(arg ns)/imu_joint" type="fixed">
         <origin xyz="0 0 0.02" rpy="0 0 0" />
         <parent link="$(arg ns)/base_link" />
         <child link="$(arg ns)/imu_link" />
     </joint>
 
-    <xacro:imu ns="$(arg ns)" /> -->
+    <xacro:imu ns="$(arg ns)" />
 
     <!-- Attach the Camera -->
-    <!-- <joint name="$(arg ns)/camera_joint" type="fixed">
+    <joint name="$(arg ns)/camera_joint" type="fixed">
         <origin xyz="0.12 0 0.1" rpy="0 0 0" />
         <parent link="$(arg ns)/base_link" />
         <child link="$(arg ns)/camera_link" />
     </joint>
 
-    <xacro:usb_camera ns="$(arg ns)" /> -->
+    <xacro:usb_camera ns="$(arg ns)" />
 
     <!-- # joint state -->
     <gazebo>
