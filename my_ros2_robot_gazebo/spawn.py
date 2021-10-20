@@ -12,14 +12,23 @@ import xacro
 
 def main():
     """
-    Main for spwaning turtlebot node
+    Use service /spawn_entity to spawn robot.
     """
     rclpy.init()
     node = rclpy.create_node("entity_spawner")
-    node.declare_parameter(name="robot_name", value=None)
-    robot_name = node.get_parameter('robot_name').get_parameter_value().string_value
 
-    if robot_name:
+    # -- args
+    node.declare_parameter(name="robot_name", value=None)
+    node.declare_parameter(name="x", value=None)
+    node.declare_parameter(name="y", value=None)
+
+    robot_name = node.get_parameter('robot_name').value
+    x = node.get_parameter('x').value
+    y = node.get_parameter('y').value
+
+    # -- call service to spawn robot
+    if robot_name is not None:
+
         # -- parse xacro to urdf
         xacro_file = os.path.join(get_package_share_directory('my_ros2_robot_gazebo'), 'urdf', f'{robot_name}', 'main.xacro')
         robot_desc = xacro.process_file(xacro_file)
@@ -29,9 +38,9 @@ def main():
         request = SpawnEntity.Request()
         request.name = f'{robot_name}'
         request.xml = robot_desc
-        request.initial_pose.position.x = 0.0
-        request.initial_pose.position.y = 0.0
-        request.initial_pose.position.z = 0.1
+        request.initial_pose.position.x = x
+        request.initial_pose.position.y = y
+        request.initial_pose.position.z = 0.2
 
         # -- service client
         node.get_logger().info("Connecting to `/spawn_entity` service...")
