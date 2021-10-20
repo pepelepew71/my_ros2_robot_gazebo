@@ -34,12 +34,12 @@
                         <remapping>~/out:=imu</remapping>
                     </ros>
                     <output_type>sensor_msgs/msg/Imu</output_type>
-                    <bodyName>$(arg ns)/imu_link</bodyName>
-                    <updateRateHZ>10.0</updateRateHZ>
-                    <gaussianNoise>0.0</gaussianNoise>
-                    <xyzOffset>0 0 0</xyzOffset>
-                    <rpyOffset>0 0 0</rpyOffset>
-                    <frameName>$(arg ns)/imu_link</frameName>
+                    <body_name>$(arg ns)/imu_link</body_name>
+                    <update_rate_hz>10.0</update_rate_hz>
+                    <gaussian_noise>0.0</gaussian_noise>
+                    <xyz_offset>0 0 0</xyz_offset>
+                    <rpy_offset>0 0 0</rpy_offset>
+                    <frame_name>$(arg ns)/imu_link</frame_name>
                 </plugin>
                 <pose>0 0 0 0 0 0</pose>
             </sensor>

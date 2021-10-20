@@ -23,7 +23,9 @@ def generate_launch_description():
         path_my_ros2_robot_gazebo,
         'worlds',
         # 'empty.world',
-        'cloister.world',
+        # 'cloister.world',
+        "cloister_asphalt.world",
+        # "playpen_asphalt.world",
     )
 
     # -- xacro
