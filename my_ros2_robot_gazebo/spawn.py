@@ -18,9 +18,9 @@ def main():
     node = rclpy.create_node("entity_spawner")
 
     # -- args
-    node.declare_parameter(name="robot_name", value=None)
-    node.declare_parameter(name="x", value=None)
-    node.declare_parameter(name="y", value=None)
+    node.declare_parameter(name="robot_name", value="mrobot")
+    node.declare_parameter(name="x", value=0.0)
+    node.declare_parameter(name="y", value=0.0)
 
     robot_name = node.get_parameter('robot_name').value
     x = node.get_parameter('x').value

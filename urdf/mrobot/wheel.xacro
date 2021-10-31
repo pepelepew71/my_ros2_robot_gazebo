@@ -7,7 +7,7 @@
         <joint name="$(arg ns)/wheel_${lr}_joint" type="continuous">
             <parent link="${parent}"/>
             <child link="$(arg ns)/wheel_${lr}_link"/>
-            <origin xyz="${motor_x} ${translateY * base_link_radius} 0" rpy="0 0 0" />
+            <origin xyz="${motor_x} ${translateY * (base_link_radius + wheel_height/2)} 0" rpy="0 0 0" />
             <axis xyz="0 1 0" rpy="0 0 0" />
         </joint>
 

@@ -10,7 +10,7 @@
     <xacro:property name="base_link_radius" value="0.13"/>
     <xacro:property name="base_link_length" value="0.005"/>
 
-    <xacro:property name="motor_x" value="-0.05"/>
+    <xacro:property name="motor_x" value="0.0"/>
 
     <!-- Wheel radius, height and mass -->
     <xacro:property name="wheel_radius" value="0.033" />
