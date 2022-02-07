@@ -138,7 +138,7 @@
 
             <!-- Change the ROS topic we will publish the odometry data to -->
             <ros>
-                <!-- <remapping>odom:=wheel/odom</remapping> -->
+                <remapping>odom:=odom</remapping>
             </ros>
 
         </plugin>
