@@ -16,7 +16,7 @@
 
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/lidar.xacro" />
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/imu.xacro" />
-    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/usb_camera.xacro" />
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/camera.xacro" />
 
     <!-- Body of robot, with plates, standoffs and Create -->
     <!-- BASE-LINK -->
@@ -83,7 +83,7 @@
         <child link="$(arg ns)/camera_link" />
     </joint>
 
-    <xacro:usb_camera ns="$(arg ns)" />
+    <xacro:camera ns="$(arg ns)" />
 
     <!-- # joint state -->
     <gazebo>
@@ -99,8 +99,12 @@
 
     <!-- # differential drive -->
     <gazebo>
-        <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
-            <update_rate>30</update_rate>
+        <plugin name='differential_drive_controller' filename='libgazebo_ros_diff_drive.so'>
+
+            <ros>
+              <!-- <remapping>cmd_vel:=cmd_vel</remapping> -->
+              <!-- <remapping>odom:=odom</remapping> -->
+            </ros>
 
             <!-- wheels -->
             <left_joint>$(arg ns)/wheel_left_joint</left_joint>
@@ -114,32 +118,13 @@
             <max_wheel_torque>30</max_wheel_torque>
             <max_wheel_acceleration>1.8</max_wheel_acceleration>
 
-            <!-- Receive velocity commands on this ROS topic -->
-            <command_topic>cmd_vel</command_topic>
-
             <!-- output -->
-            <!-- When false, publish no wheel odometry data to a ROS topic -->
             <publish_odom>true</publish_odom>
-
-            <!-- When true, publish coordinate transform from odom to base_footprint -->
-            <!-- I usually use the robot_localization package to publish this transform -->
             <publish_odom_tf>true</publish_odom_tf>
+            <publish_wheel_tf>true</publish_wheel_tf>
 
-            <!-- When true, publish coordinate transform from base_link to the wheels -->
-            <!-- The robot_state_publisher package is often used to publish this transform -->
-            <publish_wheel_tf>false</publish_wheel_tf>
-
-            <odometry_topic>odom</odometry_topic>
             <odometry_frame>odom</odometry_frame>
             <robot_base_frame>base_link</robot_base_frame>
-
-            <!-- Odometry source, 0 for ENCODER, 1 for WORLD, defaults to WORLD -->
-            <odometry_source>1</odometry_source>
-
-            <!-- Change the ROS topic we will publish the odometry data to -->
-            <ros>
-                <remapping>odom:=odom</remapping>
-            </ros>
 
         </plugin>
     </gazebo>
