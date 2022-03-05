@@ -31,6 +31,8 @@ def launch_setup(context, *args, **kwargs):
     return [launch_gzserver, launch_gzclient]
 
 def generate_launch_description():
+    """
+    """
     ld = LaunchDescription()
     ld.add_action(DeclareLaunchArgument(name="world_name"))
     ld.add_action(OpaqueFunction(function=launch_setup))

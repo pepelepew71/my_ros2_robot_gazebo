@@ -6,17 +6,25 @@
     <xacro:arg name="ns" default="" />
 
     <!-- Include -->
-    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/material.xacro" />
+    <!-- <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/material.xacro" />
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/property.xacro" />
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/inertia.xacro" />
-
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/wheel.xacro" />
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/caster.xacro" />
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/mrobot/plate.xacro" />
-
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/lidar.xacro" />
     <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/imu.xacro" />
-    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/camera.xacro" />
+    <xacro:include filename="$(find my_ros2_robot_gazebo)/urdf/accessory/camera.xacro" /> -->
+
+    <xacro:include filename="material.xacro" />
+    <xacro:include filename="property.xacro" />
+    <xacro:include filename="inertia.xacro" />
+    <xacro:include filename="wheel.xacro" />
+    <xacro:include filename="caster.xacro" />
+    <xacro:include filename="plate.xacro" />
+    <xacro:include filename="../accessory/lidar.xacro" />
+    <xacro:include filename="../accessory/imu.xacro" />
+    <xacro:include filename="../accessory/camera_m.xacro" />
 
     <!-- Body of robot, with plates, standoffs and Create -->
     <!-- BASE-LINK -->
@@ -83,7 +91,7 @@
         <child link="$(arg ns)/camera_link" />
     </joint>
 
-    <xacro:camera ns="$(arg ns)" />
+    <xacro:camera_m ns="$(arg ns)" />
 
     <!-- # joint state -->
     <gazebo>
