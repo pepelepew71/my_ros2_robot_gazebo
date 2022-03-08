@@ -1,5 +1,5 @@
 """
-Launch gazebo with world file and spawn a robot by service with xacro
+Spawn a robot by gazebo's service with xacro
 """
 
 import os
@@ -20,12 +20,6 @@ def generate_launch_description():
     y = LaunchConfiguration('y', default="0.0")
 
     # -- IncludeLaunchDescription
-    # -- world_name: cloister, cloister_asphalt, gallery, playpen, playpen_asphalt
-    launch_world = IncludeLaunchDescription(
-        launch_description_source=PythonLaunchDescriptionSource(os.path.join(path_current_pkg, 'launch', '_gazebo.launch.py')),
-        launch_arguments={"world_name": "cloister"}.items()
-    )
-
     launch_spawn = IncludeLaunchDescription(
         launch_description_source=PythonLaunchDescriptionSource(os.path.join(path_current_pkg, 'launch', '_spawn_by_xacro.launch.py')),
         launch_arguments={
@@ -38,7 +32,6 @@ def generate_launch_description():
 
     # -- LaunchDescription
     ld = LaunchDescription()
-    ld.add_action(launch_world)
     ld.add_action(launch_spawn)
 
     return ld

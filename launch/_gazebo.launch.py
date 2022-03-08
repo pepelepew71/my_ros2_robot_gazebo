@@ -1,3 +1,7 @@
+"""
+world_name: cloister, cloister_asphalt, gallery, playpen, playpen_asphalt
+"""
+
 import os
 
 from ament_index_python.packages import get_package_share_directory
@@ -12,11 +16,11 @@ def launch_setup(context, *args, **kwargs):
     """
     """
     # -- vars
-    world_name = LaunchConfiguration(variable_name="world_name").perform(context=context)
+    name = LaunchConfiguration(variable_name="name").perform(context=context)
 
     path_gazebo_ros = get_package_share_directory('gazebo_ros')
     path_current_pkg = get_package_share_directory('my_ros2_robot_gazebo')
-    path_world = os.path.join(path_current_pkg, 'worlds', f'{world_name}.world')
+    path_world = os.path.join(path_current_pkg, 'worlds', f'{name}.world')
 
     # -- IncludeLaunchDescription
     launch_gzserver = IncludeLaunchDescription(
@@ -34,6 +38,6 @@ def generate_launch_description():
     """
     """
     ld = LaunchDescription()
-    ld.add_action(DeclareLaunchArgument(name="world_name"))
+    ld.add_action(DeclareLaunchArgument(name="name"))
     ld.add_action(OpaqueFunction(function=launch_setup))
     return ld

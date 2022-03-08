@@ -19,7 +19,7 @@ def generate_launch_description():
     # -- world_name: cloister, cloister_asphalt, gallery, playpen, playpen_asphalt
     launch_world = IncludeLaunchDescription(
         launch_description_source=PythonLaunchDescriptionSource(os.path.join(path_current_pkg, 'launch', '_gazebo.launch.py')),
-        launch_arguments={"world_name": "cloister"}.items()
+        launch_arguments={"name": "cloister"}.items()
     )
 
     # -- LaunchDescription
