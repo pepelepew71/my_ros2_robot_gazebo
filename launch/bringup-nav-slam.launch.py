@@ -46,7 +46,7 @@ def generate_launch_description():
         namespace='',
         executable='rviz2',
         name='rviz2',
-        arguments=['-d' + os.path.join(folder_pkg, 'config', 'nav.rviz')]
+        arguments=['-d' + os.path.join(folder_pkg, 'config', 'frontier.rviz')]
     )
 
     # -- LaunchDescription
