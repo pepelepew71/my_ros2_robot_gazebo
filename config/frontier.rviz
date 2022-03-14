@@ -5,7 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /LaserScan1/Topic1
-        - /MarkerArray1/Topic1
+        - /MarkerArray.Frontier1/Topic1
       Splitter Ratio: 0.5
     Tree Height: 728
   - Class: rviz_common/Selection
@@ -278,7 +278,7 @@ Visualization Manager:
       Value: true
     - Class: rviz_default_plugins/MarkerArray
       Enabled: true
-      Name: MarkerArray
+      Name: MarkerArray.Frontier
       Namespaces:
         "": true
       Topic:
@@ -287,6 +287,30 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Best Effort
         Value: /markers_frontiers
+      Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: MarkerArray.Que.Map
+      Namespaces:
+        "": true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /queue_map
+      Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: MarkerArray.Que.Frontier
+      Namespaces:
+        "": true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /queue_frontier
       Value: true
   Enabled: true
   Global Options:
@@ -343,11 +367,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 93.2232437133789
+      Scale: 113.0101318359375
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz_default_plugins)
-      X: 0.5781491994857788
-      Y: -2.5658459663391113
+      X: 0.6038469076156616
+      Y: -0.9092233777046204
     Saved: ~
 Window Geometry:
   Displays:
