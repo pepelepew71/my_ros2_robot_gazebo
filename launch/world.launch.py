@@ -13,12 +13,12 @@ def generate_launch_description():
     """
     """
     # -- vars
-    path_current_pkg = get_package_share_directory('my_ros2_robot_gazebo')
+    folder_robot = get_package_share_directory('my_ros2_robot_gazebo')
 
     # -- IncludeLaunchDescription
     # -- world_name: cloister, cloister_asphalt, gallery, playpen, playpen_asphalt
     launch_world = IncludeLaunchDescription(
-        launch_description_source=PythonLaunchDescriptionSource(os.path.join(path_current_pkg, 'launch', '_gazebo.launch.py')),
+        launch_description_source=PythonLaunchDescriptionSource(os.path.join(folder_robot, 'launch', '_gazebo.launch.py')),
         launch_arguments={"name": "cloister"}.items()
     )
 

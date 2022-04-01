@@ -14,14 +14,14 @@ def generate_launch_description():
     """
     """
     # -- vars
-    path_current_pkg = get_package_share_directory('my_ros2_robot_gazebo')
+    folder_robot = get_package_share_directory('my_ros2_robot_gazebo')
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     x = LaunchConfiguration('x', default="0.0")
     y = LaunchConfiguration('y', default="0.0")
 
     # -- IncludeLaunchDescription
     launch_spawn = IncludeLaunchDescription(
-        launch_description_source=PythonLaunchDescriptionSource(os.path.join(path_current_pkg, 'launch', '_spawn_by_xacro.launch.py')),
+        launch_description_source=PythonLaunchDescriptionSource(os.path.join(folder_robot, 'launch', '_spawn_by_xacro.launch.py')),
         launch_arguments={
             "use_sim_time": use_sim_time,
             "name": "mrobot",
