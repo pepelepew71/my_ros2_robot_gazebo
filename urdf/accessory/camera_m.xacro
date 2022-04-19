@@ -23,28 +23,32 @@
         </gazebo>
 
         <gazebo reference="$(arg ns)/camera_link">
-            <sensor name='$(arg ns)/camera_sensor' type='camera'>
+            <sensor name='camera_topics' type='camera'>
+                <plugin name='camera_driver' filename='libgazebo_ros_camera.so'>
+                    <ros>
+                        <namespace>$(arg ns)</namespace>
+                    </ros>
+                </plugin>
                 <always_on>1</always_on>
                 <visualize>0</visualize>
                 <update_rate>30</update_rate>
                 <camera name='$(arg ns)/camera'>
-                <horizontal_fov>1.0856</horizontal_fov>
-                <image>
-                    <width>1280</width>
-                    <height>720</height>
-                    <format>R8G8B8</format>
-                </image>
-                <clip>
-                    <near>0.03</near>
-                    <far>100</far>
-                </clip>
-                <noise>
-                    <type>gaussian</type>
-                    <mean>0</mean>
-                    <stddev>0.007</stddev>
-                </noise>
+                    <horizontal_fov>1.0856</horizontal_fov>
+                    <image>
+                        <width>1280</width>
+                        <height>720</height>
+                        <format>R8G8B8</format>
+                    </image>
+                    <clip>
+                        <near>0.03</near>
+                        <far>100</far>
+                    </clip>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0</mean>
+                        <stddev>0.007</stddev>
+                    </noise>
                 </camera>
-                <plugin name='camera_driver' filename='libgazebo_ros_camera.so'/>
             </sensor>
         </gazebo>
 

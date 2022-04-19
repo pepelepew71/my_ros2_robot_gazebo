@@ -10,22 +10,24 @@ from ament_index_python.packages import get_package_share_directory
 from gazebo_msgs.srv import SpawnEntity
 import xacro
 
-def _get_sdf_from_xacro(name: str) -> str:
-    xacro_file = os.path.join(
-        get_package_share_directory('my_ros2_robot_gazebo'),
-        'urdf', name, 'main.xacro'
-    )
-    sdf = xacro.process_file(xacro_file)
+def _get_sdf_from_xacro(ns: str="") -> str:
+    folder_current_pkg = get_package_share_directory('my_ros2_robot_gazebo')
+    path_xacro_file = os.path.join(folder_current_pkg, 'urdf', "mrobot", 'main.xacro')
+    sdf = xacro.process_file(path_xacro_file, mappings={'ns' : ns}) if ns else xacro.process_file(path_xacro_file)
     sdf = sdf.toxml()
     return sdf
 
-def _get_request(name: str, x: float, y: float, sdf: str) -> SpawnEntity.Request:
+def _get_request(name: str, sdf: str, x: float, y: float, z: float, qx: float, qy: float, qz: float, qw: float) -> SpawnEntity.Request:
     req = SpawnEntity.Request()
     req.name = name
     req.xml = sdf
     req.initial_pose.position.x = x
     req.initial_pose.position.y = y
-    req.initial_pose.position.z = 0.2
+    req.initial_pose.position.z = z
+    req.initial_pose.orientation.x = qx
+    req.initial_pose.orientation.y = qy
+    req.initial_pose.orientation.z = qz
+    req.initial_pose.orientation.w = qw
     return req
 
 def _call_service(node, request: SpawnEntity.Request):
@@ -56,19 +58,31 @@ class Spawner:
         node = rclpy.create_node("entity_spawner")
 
         # -- args
-        node.declare_parameter(name="name", value="mrobot")
+        node.declare_parameter(name="name", value="robot")
+        node.declare_parameter(name="ns", value="")
         node.declare_parameter(name="x", value=0.0)
         node.declare_parameter(name="y", value=0.0)
+        node.declare_parameter(name="z", value=0.2)
+        node.declare_parameter(name="qx", value=0.0)
+        node.declare_parameter(name="qy", value=0.0)
+        node.declare_parameter(name="qz", value=0.0)
+        node.declare_parameter(name="qw", value=1.0)
 
         name = node.get_parameter('name').value
+        ns = node.get_parameter('ns').value
         x = node.get_parameter('x').value
         y = node.get_parameter('y').value
+        z = node.get_parameter('z').value
+        qx = node.get_parameter('qx').value
+        qy = node.get_parameter('qy').value
+        qz = node.get_parameter('qz').value
+        qw = node.get_parameter('qw').value
 
         # -- parse xacro to urdf
-        sdf = _get_sdf_from_xacro(name=name)
+        sdf = _get_sdf_from_xacro(ns=ns)
 
         # -- get request
-        request = _get_request(name=name, x=x, y=y, sdf=sdf)
+        request = _get_request(name=name, sdf=sdf, x=x, y=y, z=z, qx=qx, qy=qy, qz=qz, qw=qw)
 
         # -- call service
         _call_service(node=node, request=request)

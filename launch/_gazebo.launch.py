@@ -18,18 +18,18 @@ def launch_setup(context, *args, **kwargs):
     # -- vars
     name = LaunchConfiguration(variable_name="name").perform(context=context)
 
-    path_gazebo_ros = get_package_share_directory('gazebo_ros')
-    path_current_pkg = get_package_share_directory('my_ros2_robot_gazebo')
-    path_world = os.path.join(path_current_pkg, 'worlds', f'{name}.world')
+    folder_gazebo_ros = get_package_share_directory('gazebo_ros')
+    folder_current_pkg = get_package_share_directory('my_ros2_robot_gazebo')
+    path_world = os.path.join(folder_current_pkg, 'worlds', f'{name}.world')
 
     # -- IncludeLaunchDescription
     launch_gzserver = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(path_gazebo_ros, 'launch', 'gzserver.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(folder_gazebo_ros, 'launch', 'gzserver.launch.py')),
         launch_arguments={'world': path_world}.items()
     )
 
     launch_gzclient = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(path_gazebo_ros, 'launch', 'gzclient.launch.py'))
+        PythonLaunchDescriptionSource(os.path.join(folder_gazebo_ros, 'launch', 'gzclient.launch.py'))
     )
 
     # return [launch_gzserver, launch_gzclient]

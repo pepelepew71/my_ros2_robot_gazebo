@@ -28,8 +28,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'spawn_by_xacro = my_ros2_robot_gazebo.spawner:Spawner.by_xacro',
-            'spawn_by_sdf = my_ros2_robot_gazebo.spawner:Spawner.by_sdf',
+            'by_xacro = my_ros2_robot_gazebo.spawner:Spawner.by_xacro',
+            'by_sdf = my_ros2_robot_gazebo.spawner:Spawner.by_sdf',
         ],
     },
 )
