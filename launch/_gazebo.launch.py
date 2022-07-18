@@ -32,8 +32,8 @@ def launch_setup(context, *args, **kwargs):
         PythonLaunchDescriptionSource(os.path.join(folder_gazebo_ros, 'launch', 'gzclient.launch.py'))
     )
 
-    # return [launch_gzserver, launch_gzclient]
-    return [launch_gzserver]
+    return [launch_gzserver, launch_gzclient]
+    # return [launch_gzserver]
 
 def generate_launch_description():
     """
